@@ -1,5 +1,4 @@
 import base64
-import os
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -8,11 +7,14 @@ def encrypt():
     print()
     message = input("Enter message to be encrypted: ")
     message = message.encode()
+    print()
 
-    iterations = input("Enter a kdf iteration value: ")
+    salt = input("Enter your salt value: ")
+    salt = salt.encode()
+
+    iterations = input("Enter a key derivation iteration value: ")
     iterations = int(iterations)
 
-    salt = os.urandom(16)
     kdf = PBKDF2HMAC(
         algorithm = hashes.SHA256(),
         length = 32,
@@ -20,20 +22,20 @@ def encrypt():
         iterations = iterations
     )
 
+    print()
     password = input("Enter encryption password: ")
     password = password.encode()
 
     key = base64.urlsafe_b64encode(kdf.derive(password))
     token = Fernet(key).encrypt(message)
-    salt = base64.urlsafe_b64encode(salt)
     
     print()
-    print (f"Store these values in a secure place: ")
+    print (f"Store this value in a secure place: ")
     print (f"   Your encrypted message ---> {token.decode()}")
-    print (f"   Your encryption salt ---> {salt.decode()}")
     print()
     print (f"Commit these values to memory only: ")
-    print (f"   Your selected iterations ---> {iterations}")
+    print (f"   Your encryption salt ---> {salt.decode()}")
+    print (f"   Your selected key derivation iterations ---> {iterations}")
     print (f"   Your encryption password ---> {password.decode()}")
 
     print()
@@ -42,12 +44,12 @@ def decrypt():
     print()
     token = input("Enter your encrypted message: ")
     token = token.encode()
+    print()
 
     salt = input("Enter your salt: ")
     salt = salt.encode()
-    salt = base64.urlsafe_b64decode(salt)
 
-    iterations = input("Enter a kdf iteration value: ")
+    iterations = input("Enter a key derivation iteration value: ")
     iterations = int(iterations)
 
     kdf = PBKDF2HMAC(
@@ -56,7 +58,8 @@ def decrypt():
         salt = salt,
         iterations = iterations
     )
-
+    
+    print()
     password = input("Enter your password: ")
     password = password.encode()
 

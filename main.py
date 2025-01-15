@@ -1,3 +1,4 @@
+# To execute: Open command prompt, navigate to file directory containing script file. Type 'pyython main.py" to run.
 import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes

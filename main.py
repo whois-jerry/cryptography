@@ -1,3 +1,4 @@
+# To execute: Open command prompt, navigate to file directory containing script file. Type 'python main.py" to run.
 import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
@@ -75,6 +76,12 @@ prompt = input("Press 1 to encrypt a message. Press 2 to decrypt a message: ")
 if prompt == str(1):
     encrypt()
 elif prompt == str(2):
-    decrypt()
+    try:
+        decrypt()
+    except:
+        print()
+        print("Your decryption failed.")
+        print("Please check your salt, iterations, and password values.")
+        print()
 else:
     print("Please choose an available option.")
